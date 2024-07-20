@@ -4,10 +4,11 @@
 #include <vector>
 #include <fstream>
 #include <chrono>
+#include <sstream>				// for saving files
+#include <iomanip>				// for saving files
 
 class Read_BMP
 {
-
 private:
 
 	struct BITMAP_header
@@ -77,8 +78,8 @@ public:
 	Read_BMP();																// constructor 
 	int char_to_int(unsigned char height [4]);								// convert char type to int type
 	void printData();														// print data in prompt
-	void readData(const char* name_file_r);									// read data from file
-	void writeData(const char* name_file_w);								// save data to file
+	void readData(const char* Open_filename);									// read data from file
+	void writeData(const char* Output_filename_path);								// save data to file
 		
 	void chartofloatVector();												// change data type from char to float and add '0' value 
 	void floattocharVector();												// change data type from float to char
@@ -86,7 +87,9 @@ public:
 	void lesszerovalueVector();												// less '0' value 
 	void boxblurImage();													// Create box blur image (normalized)
 
-
+	void Calculating_BMP(Read_BMP BMP, 
+		const char* Open_filename,
+		const char* Output_filename_path);
 	// The bitmap image starts in the lower left corner
 };
 

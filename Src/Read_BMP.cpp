@@ -75,9 +75,9 @@ void Read_BMP::printData()
 	std::cout << "Image size: " << image_size << std::endl;
 }
 
-void Read_BMP::readData(const char* name_file_r)
+void Read_BMP::readData(const char* Open_filename)
 {
-	std::basic_ifstream<unsigned char> file_r(name_file_r, std::ios::out | std::ios::binary);
+	std::basic_ifstream<unsigned char> file_r(Open_filename, std::ios::out | std::ios::binary);
 
 	file_r.read(&BITMAP_header_pointer->name[0],				2 * sizeof(char));
 
@@ -203,9 +203,25 @@ void Read_BMP::readData(const char* name_file_r)
 	
 }
 
-void Read_BMP::writeData(const char* name_file_w)
+void Read_BMP::writeData(const char* Output_filename_path)
 {
-	std::basic_ofstream<unsigned char> file_w(name_file_w, std::ios::out | std::ios::binary);
+	const auto Start = std::chrono::high_resolution_clock::now();
+
+	auto now = std::chrono::system_clock::now();
+
+	auto localTime = std::chrono::system_clock::to_time_t(now);
+
+	const char* extension = ".bmp";
+
+	std::stringstream ss;
+
+	ss << "BMP_file " << std::put_time(std::localtime(&localTime), "%Y_%m_%d_%H_%M_%S") << extension;
+
+	std::string file_date = ss.str();
+
+	file_date.erase(remove(file_date.begin(), file_date.end(), '\"'), file_date.end());
+
+	std::basic_ofstream<unsigned char> file_w(Output_filename_path + file_date, std::ios::out | std::ios::binary);
 
 	file_w.write(&BITMAP_header_pointer->name[0], 2 * sizeof(char));
 
@@ -649,4 +665,17 @@ void Read_BMP::boxblurImage()
 		std::cout << "Bits per pixels value is incorrect!" << std::endl;
 		break;
 	}
+}
+
+void Read_BMP::Calculating_BMP(Read_BMP BMP, 
+	const char* Open_filename,
+	const char* Output_filename_path)
+{
+	BMP.readData(Open_filename);
+	BMP.chartofloatVector();
+	BMP.addzerovalueVector();
+	BMP.boxblurImage();
+	BMP.lesszerovalueVector();
+	BMP.floattocharVector();
+	BMP.writeData(Output_filename_path);
 }

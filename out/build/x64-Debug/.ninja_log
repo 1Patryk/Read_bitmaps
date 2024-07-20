@@ -1,0 +1,16 @@
+# ninja log v5
+8	2747	7431964943015651	CMakeFiles/FirstProject.dir/Src/Read_BMP.cpp.obj	a18e2c3c7c262b61
+4	1012	7431965186724056	CMakeFiles/FirstProject.dir/Src/main.cpp.obj	e09b5bf833ea20d1
+1013	1875	7431965194766228	FirstProject.exe	dc562b1af8f0d314
+14	1177	7431988277914673	CMakeFiles/FirstProject.dir/Src/main.cpp.obj	e09b5bf833ea20d1
+19	1350	7431988279640061	CMakeFiles/FirstProject.dir/Src/Read_BMP.cpp.obj	a18e2c3c7c262b61
+1350	1716	7431988282492435	FirstProject.exe	dc562b1af8f0d314
+13	1005	7431988936270802	CMakeFiles/FirstProject.dir/Src/Read_BMP.cpp.obj	a18e2c3c7c262b61
+1006	1322	7431988938838396	FirstProject.exe	dc562b1af8f0d314
+18	1387	7431999399795309	CMakeFiles/FirstProject.dir/Src/main.cpp.obj	e09b5bf833ea20d1
+23	1599	7431999401892109	CMakeFiles/FirstProject.dir/Src/Read_BMP.cpp.obj	a18e2c3c7c262b61
+1599	1929	7431999404461107	FirstProject.exe	dc562b1af8f0d314
+17	853	7431999961428622	CMakeFiles/FirstProject.dir/Src/main.cpp.obj	e09b5bf833ea20d1
+854	1147	7431999963645296	FirstProject.exe	dc562b1af8f0d314
+15	760	7432000612753732	CMakeFiles/FirstProject.dir/Src/main.cpp.obj	e09b5bf833ea20d1
+761	1093	7432000615486418	FirstProject.exe	dc562b1af8f0d314
