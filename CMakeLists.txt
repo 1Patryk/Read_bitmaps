@@ -1,10 +1,16 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.5)
 
 project(FirstProject VERSION 0.1 LANGUAGES CXX )
 
-set(SOURCES
-	Include/Read_BMP.hpp
-	Src/main.cpp
-	Src/Read_BMP.cpp)
+file(GLOB ALL_SOURCE
+	"${PROJECT_SOURCE_DIR}/Include/*.h"
+	"${PROJECT_SOURCE_DIR}/Include/*.hpp"
+	"${PROJECT_SOURCE_DIR}/src/*.cpp"
+	"${PROJECT_SOURCE_DIR}/src/*.c"
+)
 
-add_executable(${PROJECT_NAME} ${SOURCES})
+configure_file(
+	${CMAKE_SOURCE_DIR}/ProjectConfig.h.in
+	${CMAKE_SOURCE_DIR}/ProjectConfig.h)
+
+add_executable(${PROJECT_NAME} ${ALL_SOURCE})

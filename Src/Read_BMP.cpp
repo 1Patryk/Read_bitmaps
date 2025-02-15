@@ -77,129 +77,135 @@ void Read_BMP::printData()
 
 void Read_BMP::readData(const char* Open_filename)
 {
-	std::basic_ifstream<unsigned char> file_r(Open_filename, std::ios::out | std::ios::binary);
+	std::cout << Open_filename << std::endl;
 
-	file_r.read(&BITMAP_header_pointer->name[0],				2 * sizeof(char));
+	std::basic_ifstream<unsigned char> file_r(Open_filename, std::ios::in | std::ios::binary);
 
-	file_r.read(&BITMAP_header_pointer->size[0],				4 * sizeof(char));
-
-	file_r.read(&BITMAP_header_pointer->reserved[0],			4 * sizeof(char));
-
-	file_r.read(&BITMAP_header_pointer->image_offset[0],		4 * sizeof(char));
-
-	file_r.read(&DIB_header_pointer->header_size[0],			4 * sizeof(char));
-
-	file_r.read(&DIB_header_pointer->width[0],					4 * sizeof(char));
-
-	file_r.read(&DIB_header_pointer->height[0],					4 * sizeof(char));
-
-	file_r.read(&DIB_header_pointer->colorplanes[0],			2 * sizeof(char));
-
-	file_r.read(&DIB_header_pointer->bitsperpixels[0],			2 * sizeof(char));
-
-	file_r.read(&DIB_header_pointer->compression[0],			4 * sizeof(char));
-
-	file_r.read(&DIB_header_pointer->image_size[0],				4 * sizeof(char));
-
-	file_r.read(&DIB_header_pointer->temp[0],					16 * sizeof(char));
-
-	unsigned char b = 0;										// blue value
-	unsigned char g = 0;										// green value
-	unsigned char r = 0;										// red value
-	unsigned char w = 0;										// white value
-
-	short int bitsperpixels = char_to_int(&DIB_header_pointer->bitsperpixels[0]);
-
-	int width = char_to_int(&DIB_header_pointer->width[0]);
-
-	int height = char_to_int(&DIB_header_pointer->height[0]);
-
-	file_r.seekg(BITMAP_header_pointer->image_offset[0]);
-
-	switch (bitsperpixels)
+	if(file_r)
 	{
-	case 24:
+		file_r.read(&BITMAP_header_pointer->name[0], 2 * sizeof(char));
 
-		cImage_blue_cannal.reserve(height);
-		cImage_green_cannal.reserve(height);
-		cImage_red_cannal.reserve(height);
+		file_r.read(&BITMAP_header_pointer->size[0], 4 * sizeof(char));
 
-		cImage_RGB_blue.reserve(width);
-		cImage_RGB_green.reserve(width);
-		cImage_RGB_red.reserve(width);
+		file_r.read(&BITMAP_header_pointer->reserved[0], 4 * sizeof(char));
 
-		for (int i = height - 1; i >= 0; i--)
+		file_r.read(&BITMAP_header_pointer->image_offset[0], 4 * sizeof(char));
+
+		file_r.read(&DIB_header_pointer->header_size[0], 4 * sizeof(char));
+
+		file_r.read(&DIB_header_pointer->width[0], 4 * sizeof(char));
+
+		file_r.read(&DIB_header_pointer->height[0], 4 * sizeof(char));
+
+		file_r.read(&DIB_header_pointer->colorplanes[0], 2 * sizeof(char));
+
+		file_r.read(&DIB_header_pointer->bitsperpixels[0], 2 * sizeof(char));
+
+		file_r.read(&DIB_header_pointer->compression[0], 4 * sizeof(char));
+
+		file_r.read(&DIB_header_pointer->image_size[0], 4 * sizeof(char));
+
+		file_r.read(&DIB_header_pointer->temp[0], 16 * sizeof(char));
+
+		unsigned char b = 0;										// blue value
+		unsigned char g = 0;										// green value
+		unsigned char r = 0;										// red value
+		unsigned char w = 0;										// white value
+
+		short int bitsperpixels = char_to_int(&DIB_header_pointer->bitsperpixels[0]);
+
+		int width = char_to_int(&DIB_header_pointer->width[0]);
+
+		int height = char_to_int(&DIB_header_pointer->height[0]);
+
+		file_r.seekg(BITMAP_header_pointer->image_offset[0]);
+
+		printData();
+
+		switch (bitsperpixels)
 		{
-			for (int j = 0; j < width; j++)
+		case 24:
+
+			cImage_blue_cannal.reserve(height);
+			cImage_green_cannal.reserve(height);
+			cImage_red_cannal.reserve(height);
+
+			cImage_RGB_blue.reserve(width);
+			cImage_RGB_green.reserve(width);
+			cImage_RGB_red.reserve(width);
+
+			for (int i = height - 1; i >= 0; i--)
 			{
-				file_r.read(&b, 1);								// read RGB blue values
-				cImage_RGB_blue.push_back(b);
-				file_r.read(&g, 1);								// read RGB green values
-				cImage_RGB_green.push_back(g);
-				file_r.read(&r, 1);								// read RGB red values
-				cImage_RGB_red.push_back(r);
+				for (int j = 0; j < width; j++)
+				{
+					file_r.read(&b, 1);								// read RGB blue values
+					cImage_RGB_blue.push_back(b);
+					file_r.read(&g, 1);								// read RGB green values
+					cImage_RGB_green.push_back(g);
+					file_r.read(&r, 1);								// read RGB red values
+					cImage_RGB_red.push_back(r);
+				}
+
+				cImage_blue_cannal.push_back(cImage_RGB_blue);
+				cImage_green_cannal.push_back(cImage_RGB_green);
+				cImage_red_cannal.push_back(cImage_RGB_red);
+
+				cImage_RGB_blue.clear();
+				cImage_RGB_green.clear();
+				cImage_RGB_red.clear();
 			}
 
-			cImage_blue_cannal.push_back(cImage_RGB_blue);
-			cImage_green_cannal.push_back(cImage_RGB_green);
-			cImage_red_cannal.push_back(cImage_RGB_red);
+			file_r.close();
 
-			cImage_RGB_blue.clear();
-			cImage_RGB_green.clear();
-			cImage_RGB_red.clear();
-		}
+			break;
 
-		file_r.close();
+		case 32:
 
-		break;
+			cImage_blue_cannal.reserve(height);
+			cImage_green_cannal.reserve(height);
+			cImage_red_cannal.reserve(height);
+			cImage_white_cannal.reserve(height);
 
-	case 32:
+			cImage_RGB_blue.reserve(width);
+			cImage_RGB_green.reserve(width);
+			cImage_RGB_red.reserve(width);
+			cImage_RGB_white.reserve(width);
 
-		cImage_blue_cannal.reserve(height);
-		cImage_green_cannal.reserve(height);
-		cImage_red_cannal.reserve(height);
-		cImage_white_cannal.reserve(height);
-
-		cImage_RGB_blue.reserve(width);
-		cImage_RGB_green.reserve(width);
-		cImage_RGB_red.reserve(width);
-		cImage_RGB_white.reserve(width);
-
-		for (int i = height - 1; i >= 0; i--)
-		{
-			for (int j = 0; j < width; j++)
+			for (int i = height - 1; i >= 0; i--)
 			{
-				file_r.read(&b, 1);								// read RGB blue values
-				cImage_RGB_blue.push_back(b);
-				file_r.read(&g, 1);								// read RGB green values
-				cImage_RGB_green.push_back(g);
-				file_r.read(&r, 1);								// read RGB red values
-				cImage_RGB_red.push_back(r);
-				file_r.read(&w, 1);								// read RGB white values
-				cImage_RGB_white.push_back(w);
+				for (int j = 0; j < width; j++)
+				{
+					file_r.read(&b, 1);								// read RGB blue values
+					cImage_RGB_blue.push_back(b);
+					file_r.read(&g, 1);								// read RGB green values
+					cImage_RGB_green.push_back(g);
+					file_r.read(&r, 1);								// read RGB red values
+					cImage_RGB_red.push_back(r);
+					file_r.read(&w, 1);								// read RGB white values
+					cImage_RGB_white.push_back(w);
+				}
+
+				cImage_blue_cannal.push_back(cImage_RGB_blue);
+				cImage_green_cannal.push_back(cImage_RGB_green);
+				cImage_red_cannal.push_back(cImage_RGB_red);
+				cImage_white_cannal.push_back(cImage_RGB_white);
+
+				cImage_RGB_blue.clear();
+				cImage_RGB_green.clear();
+				cImage_RGB_red.clear();
+				cImage_RGB_white.clear();
 			}
 
-			cImage_blue_cannal.push_back(cImage_RGB_blue);
-			cImage_green_cannal.push_back(cImage_RGB_green);
-			cImage_red_cannal.push_back(cImage_RGB_red);
-			cImage_white_cannal.push_back(cImage_RGB_white);
+			file_r.close();
 
-			cImage_RGB_blue.clear();
-			cImage_RGB_green.clear();
-			cImage_RGB_red.clear();
-			cImage_RGB_white.clear();
+			break;
+
+		default:
+
+			std::cout << "Bits per pixels value is incorrect!" << std::endl;
+			break;
 		}
-
-		file_r.close();
-
-		break;
-
-	default:
-
-		std::cout << "Bits per pixels value is incorrect!" << std::endl;
-		break;
 	}
-
 	
 }
 

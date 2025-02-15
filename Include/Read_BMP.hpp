@@ -6,6 +6,7 @@
 #include <chrono>
 #include <sstream>				// for saving files
 #include <iomanip>				// for saving files
+#include <algorithm>
 
 class Read_BMP
 {
