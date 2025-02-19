@@ -48,6 +48,8 @@ private:
 	DIB_header* DIB_header_pointer;
 	RGB* RGB_pointer;
 
+	float* Scale;
+
 	// char type vector
 
 	std::vector <std::vector <unsigned char>> cImage_white_cannal;
@@ -87,6 +89,8 @@ public:
 	void addzerovalueVector();												// and add '0' value 
 	void lesszerovalueVector();												// less '0' value 
 	void boxblurImage();													// Create box blur image (normalized)
+
+	void upscaling();
 
 	void Calculating_BMP(Read_BMP BMP, 
 		const char* Open_filename,

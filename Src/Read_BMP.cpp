@@ -6,6 +6,8 @@ Read_BMP::Read_BMP()
 	DIB_header_pointer = new DIB_header;
 	RGB_pointer = new RGB;
 
+	Scale = new float{ 1.0f };
+
 	// char type vector
 
 	cImage_white_cannal = { std::vector <std::vector<unsigned char> > { 0 } };
@@ -400,9 +402,9 @@ void Read_BMP::floattocharVector()
 {
 	short int bitsperpixels = char_to_int(&DIB_header_pointer->bitsperpixels[0]);
 
-	int height = char_to_int(&DIB_header_pointer->height[0]);
+	int height = char_to_int(&DIB_header_pointer->height[0]) * (*Scale);
 
-	int width = char_to_int(&DIB_header_pointer->width[0]);
+	int width = char_to_int(&DIB_header_pointer->width[0]) * (*Scale);
 
 	switch (bitsperpixels)
 	{
@@ -459,9 +461,9 @@ void Read_BMP::addzerovalueVector()
 {
 	short int bitsperpixels = char_to_int(&DIB_header_pointer->bitsperpixels[0]);
 
-	int height = char_to_int(&DIB_header_pointer->height[0]);
+	int height = char_to_int(&DIB_header_pointer->height[0]) * (*Scale);
 
-	int width = char_to_int(&DIB_header_pointer->width[0]);
+	int width = char_to_int(&DIB_header_pointer->width[0]) * (*Scale);
 
 	switch (bitsperpixels)
 	{
@@ -536,9 +538,9 @@ void Read_BMP::lesszerovalueVector()
 {
 	short int bitsperpixels = char_to_int(&DIB_header_pointer->bitsperpixels[0]);
 
-	int height = char_to_int(&DIB_header_pointer->height[0]);
+	int height = char_to_int(&DIB_header_pointer->height[0]) * (*Scale);
 
-	int width = char_to_int(&DIB_header_pointer->width[0]);
+	int width = char_to_int(&DIB_header_pointer->width[0]) * (*Scale);
 
 	switch (bitsperpixels)
 	{
@@ -660,6 +662,56 @@ void Read_BMP::boxblurImage()
 				fImage_blue_cannal.size() == 0 ||
 				fImage_green_cannal.size() == 0 ||
 				fImage_red_cannal.size() == 0))
+		{
+			throw std::invalid_argument("Vector is not converted to 'float' type!");
+		}
+
+		break;
+
+	default:
+
+		std::cout << "Bits per pixels value is incorrect!" << std::endl;
+		break;
+	}
+}
+
+void Read_BMP::upscaling()
+{
+	short int bitsperpixels = char_to_int(&DIB_header_pointer->bitsperpixels[0]);
+
+	int height = char_to_int(&DIB_header_pointer->height[0]) * (*Scale);
+
+	int width = char_to_int(&DIB_header_pointer->width[0]) * (*Scale);
+
+	switch (bitsperpixels)
+	{
+	case 24:
+
+		while ((fImage_blue_cannal.size() == 0 ||
+			fImage_green_cannal.size() == 0 ||
+			fImage_red_cannal.size() == 0))
+		{
+			throw std::invalid_argument("Vector is not converted to 'float' type!");
+		}
+
+		for (int i = 0; i < height; i++)
+		{
+			for (int j = 0; j < width; j++)
+			{
+				//fImage_blue_cannal[i + 1][j + 1] = (fImage_blue_cannal[i + 2][j] * BoX_b;
+
+				// **** green, red
+			}
+		}
+
+		break;
+
+	case 32:
+
+		while ((fImage_white_cannal.size() == 0 ||
+			fImage_blue_cannal.size() == 0 ||
+			fImage_green_cannal.size() == 0 ||
+			fImage_red_cannal.size() == 0))
 		{
 			throw std::invalid_argument("Vector is not converted to 'float' type!");
 		}
