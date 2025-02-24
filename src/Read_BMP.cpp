@@ -81,33 +81,38 @@ void Read_BMP::readData(const char* Open_filename)
 {
 	std::cout << Open_filename << std::endl;
 
-	std::basic_ifstream<unsigned char> file_r(Open_filename, std::ios::in | std::ios::binary);
+	std::ifstream file_r;
+	file_r.open(Open_filename, std::ios::in | std::ios::binary);
 
-	if(file_r)
+	if (!file_r.is_open())
 	{
-		file_r.read(&BITMAP_header_pointer->name[0], 2 * sizeof(char));
+	    std::cout << "Failed to open file!" << std::endl;
+	}
+	else
+	{
+		file_r.read(reinterpret_cast<char*>(&BITMAP_header_pointer->name[0]), 2 * sizeof(char));
 
-		file_r.read(&BITMAP_header_pointer->size[0], 4 * sizeof(char));
+		file_r.read(reinterpret_cast<char*>(&BITMAP_header_pointer->size[0]), 4 * sizeof(char));
 
-		file_r.read(&BITMAP_header_pointer->reserved[0], 4 * sizeof(char));
+		file_r.read(reinterpret_cast<char*>(&BITMAP_header_pointer->reserved[0]), 4 * sizeof(char));
 
-		file_r.read(&BITMAP_header_pointer->image_offset[0], 4 * sizeof(char));
+		file_r.read(reinterpret_cast<char*>(&BITMAP_header_pointer->image_offset[0]), 4 * sizeof(char));
 
-		file_r.read(&DIB_header_pointer->header_size[0], 4 * sizeof(char));
+		file_r.read(reinterpret_cast<char*>(&DIB_header_pointer->header_size[0]), 4 * sizeof(char));
 
-		file_r.read(&DIB_header_pointer->width[0], 4 * sizeof(char));
+		file_r.read(reinterpret_cast<char*>(&DIB_header_pointer->width[0]), 4 * sizeof(char));
 
-		file_r.read(&DIB_header_pointer->height[0], 4 * sizeof(char));
+		file_r.read(reinterpret_cast<char*>(&DIB_header_pointer->height[0]), 4 * sizeof(char));
 
-		file_r.read(&DIB_header_pointer->colorplanes[0], 2 * sizeof(char));
+		file_r.read(reinterpret_cast<char*>(&DIB_header_pointer->colorplanes[0]), 2 * sizeof(char));
 
-		file_r.read(&DIB_header_pointer->bitsperpixels[0], 2 * sizeof(char));
+		file_r.read(reinterpret_cast<char*>(&DIB_header_pointer->bitsperpixels[0]), 2 * sizeof(char));
 
-		file_r.read(&DIB_header_pointer->compression[0], 4 * sizeof(char));
+		file_r.read(reinterpret_cast<char*>(&DIB_header_pointer->compression[0]), 4 * sizeof(char));
 
-		file_r.read(&DIB_header_pointer->image_size[0], 4 * sizeof(char));
+		file_r.read(reinterpret_cast<char*>(&DIB_header_pointer->image_size[0]), 4 * sizeof(char));
 
-		file_r.read(&DIB_header_pointer->temp[0], 16 * sizeof(char));
+		file_r.read(reinterpret_cast<char*>(&DIB_header_pointer->temp[0]), 16 * sizeof(char));
 
 		unsigned char b = 0;										// blue value
 		unsigned char g = 0;										// green value
@@ -140,11 +145,11 @@ void Read_BMP::readData(const char* Open_filename)
 			{
 				for (int j = 0; j < width; j++)
 				{
-					file_r.read(&b, 1);								// read RGB blue values
+					file_r.read(reinterpret_cast<char*>(&b), 1);								// read RGB blue values
 					cImage_RGB_blue.push_back(b);
-					file_r.read(&g, 1);								// read RGB green values
+					file_r.read(reinterpret_cast<char*>(&g), 1);								// read RGB green values
 					cImage_RGB_green.push_back(g);
-					file_r.read(&r, 1);								// read RGB red values
+					file_r.read(reinterpret_cast<char*>(&r), 1);								// read RGB red values
 					cImage_RGB_red.push_back(r);
 				}
 
@@ -177,13 +182,13 @@ void Read_BMP::readData(const char* Open_filename)
 			{
 				for (int j = 0; j < width; j++)
 				{
-					file_r.read(&b, 1);								// read RGB blue values
+					file_r.read(reinterpret_cast<char*>(&b), 1);								// read RGB blue values
 					cImage_RGB_blue.push_back(b);
-					file_r.read(&g, 1);								// read RGB green values
+					file_r.read(reinterpret_cast<char*>(&g), 1);								// read RGB green values
 					cImage_RGB_green.push_back(g);
-					file_r.read(&r, 1);								// read RGB red values
+					file_r.read(reinterpret_cast<char*>(&r), 1);								// read RGB red values
 					cImage_RGB_red.push_back(r);
-					file_r.read(&w, 1);								// read RGB white values
+					file_r.read(reinterpret_cast<char*>(&w), 1);								// read RGB white values
 					cImage_RGB_white.push_back(w);
 				}
 
@@ -208,7 +213,6 @@ void Read_BMP::readData(const char* Open_filename)
 			break;
 		}
 	}
-	
 }
 
 void Read_BMP::writeData(const char* Output_filename_path)
@@ -229,31 +233,35 @@ void Read_BMP::writeData(const char* Output_filename_path)
 
 	file_date.erase(remove(file_date.begin(), file_date.end(), '\"'), file_date.end());
 
-	std::basic_ofstream<unsigned char> file_w(Output_filename_path + file_date, std::ios::out | std::ios::binary);
+	//std::basic_ofstream<unsigned char> file_w(Output_filename_path + file_date, std::ios::out | std::ios::binary);
 
-	file_w.write(&BITMAP_header_pointer->name[0], 2 * sizeof(char));
+	std::ofstream file_w;
 
-	file_w.write(&BITMAP_header_pointer->size[0], 4 * sizeof(char));
+	file_w.open(Output_filename_path + file_date, std::ios::out | std::ios::binary);
 
-	file_w.write(&BITMAP_header_pointer->reserved[0], 4 * sizeof(char));
+	file_w.write(reinterpret_cast<char*>(&BITMAP_header_pointer->name[0]), 2 * sizeof(char));
 
-	file_w.write(&BITMAP_header_pointer->image_offset[0], 4 * sizeof(char));
+	file_w.write(reinterpret_cast<char*>(&BITMAP_header_pointer->size[0]), 4 * sizeof(char));
 
-	file_w.write(&DIB_header_pointer->header_size[0], 4 * sizeof(char));
+	file_w.write(reinterpret_cast<char*>(&BITMAP_header_pointer->reserved[0]), 4 * sizeof(char));
 
-	file_w.write(&DIB_header_pointer->width[0], 4 * sizeof(char));
+	file_w.write(reinterpret_cast<char*>(&BITMAP_header_pointer->image_offset[0]), 4 * sizeof(char));
 
-	file_w.write(&DIB_header_pointer->height[0], 4 * sizeof(char));
+	file_w.write(reinterpret_cast<char*>(&DIB_header_pointer->header_size[0]), 4 * sizeof(char));
 
-	file_w.write(&DIB_header_pointer->colorplanes[0], 2 * sizeof(char));
+	file_w.write(reinterpret_cast<char*>(&DIB_header_pointer->width[0]), 4 * sizeof(char));
 
-	file_w.write(&DIB_header_pointer->bitsperpixels[0], 2 * sizeof(char));
+	file_w.write(reinterpret_cast<char*>(&DIB_header_pointer->height[0]), 4 * sizeof(char));
 
-	file_w.write(&DIB_header_pointer->compression[0], 4 * sizeof(char));
+	file_w.write(reinterpret_cast<char*>(&DIB_header_pointer->colorplanes[0]), 2 * sizeof(char));
 
-	file_w.write(&DIB_header_pointer->image_size[0], 4 * sizeof(char));
+	file_w.write(reinterpret_cast<char*>(&DIB_header_pointer->bitsperpixels[0]), 2 * sizeof(char));
 
-	file_w.write(&DIB_header_pointer->temp[0], 16 * sizeof(char));
+	file_w.write(reinterpret_cast<char*>(&DIB_header_pointer->compression[0]), 4 * sizeof(char));
+
+	file_w.write(reinterpret_cast<char*>(&DIB_header_pointer->image_size[0]), 4 * sizeof(char));
+
+	file_w.write(reinterpret_cast<char*>(&DIB_header_pointer->temp[0]), 16 * sizeof(char));
 
 	// Write pixels
 
@@ -286,11 +294,11 @@ void Read_BMP::writeData(const char* Output_filename_path)
 			for (int j = 0; j < width; j++)
 			{
 				b = cImage_blue_cannal[i][j];
-				file_w.write(&b, 1);										// write blue pixel values
+				file_w.write(reinterpret_cast<char*>(&b), 1);										// write blue pixel values
 				g = cImage_green_cannal[i][j];
-				file_w.write(&g, 1);										// write green pixel values
+				file_w.write(reinterpret_cast<char*>(&g), 1);										// write green pixel values
 				r = cImage_red_cannal[i][j];
-				file_w.write(&r, 1);										// write red pixel values
+				file_w.write(reinterpret_cast<char*>(&r), 1);										// write red pixel values
 			}
 		}
 
@@ -312,13 +320,13 @@ void Read_BMP::writeData(const char* Output_filename_path)
 			for (int j = 0; j < width; j++)
 			{
 				b = cImage_blue_cannal[i][j];
-				file_w.write(&b, 1);										// write blue pixel values
+				file_w.write(reinterpret_cast<char*>(&b), 1);										// write blue pixel values
 				g = cImage_green_cannal[i][j];
-				file_w.write(&g, 1);										// write green pixel values
+				file_w.write(reinterpret_cast<char*>(&g), 1);										// write green pixel values
 				r = cImage_red_cannal[i][j];
-				file_w.write(&r, 1);										// write red pixel values
+				file_w.write(reinterpret_cast<char*>(&r), 1);										// write red pixel values
 				w = cImage_white_cannal[i][j];
-				file_w.write(&w, 1);										// write white pixel values
+				file_w.write(reinterpret_cast<char*>(&w), 1);										// write white pixel values
 			}
 		}
 
@@ -337,9 +345,9 @@ void Read_BMP::chartofloatVector()
 {
 	short int bitsperpixels = char_to_int(&DIB_header_pointer->bitsperpixels[0]);
 
-	int height = char_to_int(&DIB_header_pointer->height[0]);
+	int height = char_to_int(&DIB_header_pointer->height[0]) * (*Scale);
 
-	int width = char_to_int(&DIB_header_pointer->width[0]);
+	int width = char_to_int(&DIB_header_pointer->width[0]) * (*Scale);
 
 	switch (bitsperpixels)
 	{
@@ -698,7 +706,7 @@ void Read_BMP::upscaling()
 		{
 			for (int j = 0; j < width; j++)
 			{
-				//fImage_blue_cannal[i + 1][j + 1] = (fImage_blue_cannal[i + 2][j] * BoX_b;
+				//fImage_blue_cannal[i + 1][j + 1] = fImage_blue_cannal[i + 2][j] * BoX_b;
 
 				// **** green, red
 			}
@@ -732,7 +740,11 @@ void Read_BMP::Calculating_BMP(Read_BMP BMP,
 	BMP.readData(Open_filename);
 	BMP.chartofloatVector();
 	BMP.addzerovalueVector();
+
+
 	BMP.boxblurImage();
+
+
 	BMP.lesszerovalueVector();
 	BMP.floattocharVector();
 	BMP.writeData(Output_filename_path);

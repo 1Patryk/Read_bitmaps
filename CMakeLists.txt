@@ -14,3 +14,5 @@ configure_file(
 	${CMAKE_SOURCE_DIR}/ProjectConfig.h)
 
 add_executable(${PROJECT_NAME} ${ALL_SOURCE})
+
+target_compile_definitions(FirstProject PUBLIC PROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}")

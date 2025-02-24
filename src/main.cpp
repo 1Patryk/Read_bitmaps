@@ -14,8 +14,9 @@ void Display_results_counting_time(start Start, stop Stop, std::string namefunct
 
 int main()
 {
-	const char* Open_filename = { "C:/Users/patry/Desktop/GITHUB/Read_bitmaps/In_BMP/sample_1280×853.bmp" };		// name file to read
-	const char* Output_filename_path = { "C:/Users/patry/Desktop/GitHub/Read_bitmaps/Out_BMP/" };					// name file to write
+	std::string path = { " 'SOURCE_DIR' "};
+	const char* Open_filename = { "../In_BMP/sample_1280_853.bmp" };		// name file to read
+	const char* Output_filename_path = { "../Out_BMP/" };					// name file to write
 
 	std::cout << "Calculations started... " << std::endl;
 

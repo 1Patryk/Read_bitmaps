@@ -1,1 +1,4 @@
-#define PROJECT_SOURCE_DIR C:/Users/patry/Desktop/GITHUB/Read_bitmaps
+#define SOURCE_DIR /home/patrick/Desktop/Github/Read_bitmaps
+
+#define VALUE(string) #string
+#define PROJECT_SOURCE_DIR VALUE(string)
