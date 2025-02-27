@@ -1,5 +1,4 @@
 #include "../Include/Read_BMP.hpp"
-#include "../ProjectConfig.h"
 
 template<class start, class stop>
 void Display_results_counting_time(start Start, stop Stop, std::string namefunction)

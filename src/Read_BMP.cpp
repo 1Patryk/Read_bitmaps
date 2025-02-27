@@ -6,7 +6,7 @@ Read_BMP::Read_BMP()
 	DIB_header_pointer = new DIB_header;
 	RGB_pointer = new RGB;
 
-	Scale = new float{ 1.0f };
+	Scale = new float{ 2.0f };
 
 	// char type vector
 
@@ -133,13 +133,13 @@ void Read_BMP::readData(const char* Open_filename)
 		{
 		case 24:
 
-			cImage_blue_cannal.reserve(height);
-			cImage_green_cannal.reserve(height);
-			cImage_red_cannal.reserve(height);
+			cImage_blue_cannal.reserve(height  * (*Scale));
+			cImage_green_cannal.reserve(height  * (*Scale));
+			cImage_red_cannal.reserve(height  * (*Scale));
 
-			cImage_RGB_blue.reserve(width);
-			cImage_RGB_green.reserve(width);
-			cImage_RGB_red.reserve(width);
+			cImage_RGB_blue.reserve(width  * (*Scale));
+			cImage_RGB_green.reserve(width  * (*Scale));
+			cImage_RGB_red.reserve(width  * (*Scale));
 
 			for (int i = height - 1; i >= 0; i--)
 			{
@@ -168,15 +168,15 @@ void Read_BMP::readData(const char* Open_filename)
 
 		case 32:
 
-			cImage_blue_cannal.reserve(height);
-			cImage_green_cannal.reserve(height);
-			cImage_red_cannal.reserve(height);
-			cImage_white_cannal.reserve(height);
+			cImage_blue_cannal.reserve(height  * (*Scale));
+			cImage_green_cannal.reserve(height  * (*Scale));
+			cImage_red_cannal.reserve(height  * (*Scale));
+			cImage_white_cannal.reserve(height  * (*Scale));
 
-			cImage_RGB_blue.reserve(width);
-			cImage_RGB_green.reserve(width);
-			cImage_RGB_red.reserve(width);
-			cImage_RGB_white.reserve(width);
+			cImage_RGB_blue.reserve(width  * (*Scale));
+			cImage_RGB_green.reserve(width  * (*Scale));
+			cImage_RGB_red.reserve(width  * (*Scale));
+			cImage_RGB_white.reserve(width  * (*Scale));
 
 			for (int i = height - 1; i >= 0; i--)
 			{
@@ -272,9 +272,9 @@ void Read_BMP::writeData(const char* Output_filename_path)
 
 	short int bitsperpixels = char_to_int(&DIB_header_pointer->bitsperpixels[0]);
 
-	int height = char_to_int(&DIB_header_pointer->height[0]);
+	int height = char_to_int(&DIB_header_pointer->height[0]) * (*Scale);
 
-	int width = char_to_int(&DIB_header_pointer->width[0]);
+	int width = char_to_int(&DIB_header_pointer->width[0]) * (*Scale);
 
 	file_w.seekp(BITMAP_header_pointer->image_offset[0]);
 
@@ -345,9 +345,9 @@ void Read_BMP::chartofloatVector()
 {
 	short int bitsperpixels = char_to_int(&DIB_header_pointer->bitsperpixels[0]);
 
-	int height = char_to_int(&DIB_header_pointer->height[0]) * (*Scale);
+	int height = char_to_int(&DIB_header_pointer->height[0]);
 
-	int width = char_to_int(&DIB_header_pointer->width[0]) * (*Scale);
+	int width = char_to_int(&DIB_header_pointer->width[0]);
 
 	switch (bitsperpixels)
 	{
@@ -371,7 +371,7 @@ void Read_BMP::chartofloatVector()
 
 		for (int i = 0; i < height; i++)
 		{
-			for (int j = 0; j < width; j++)
+			for (int j = 0; j <= width; j++)
 			{
 				fImage_RGB_blue.push_back(static_cast<float>(cImage_blue_cannal[i][j]));
 				fImage_RGB_green.push_back(static_cast<float>(cImage_green_cannal[i][j]));
@@ -469,9 +469,9 @@ void Read_BMP::addzerovalueVector()
 {
 	short int bitsperpixels = char_to_int(&DIB_header_pointer->bitsperpixels[0]);
 
-	int height = char_to_int(&DIB_header_pointer->height[0]) * (*Scale);
+	int height = char_to_int(&DIB_header_pointer->height[0]);
 
-	int width = char_to_int(&DIB_header_pointer->width[0]) * (*Scale);
+	int width = char_to_int(&DIB_header_pointer->width[0]);
 
 	switch (bitsperpixels)
 	{
@@ -484,13 +484,13 @@ void Read_BMP::addzerovalueVector()
 			throw std::invalid_argument("Vector is not converted to 'float' type!");
 		}
 
-		fImage_blue_cannal.reserve(height + 2);							// storage reserve
-		fImage_green_cannal.reserve(height + 2);						//	
-		fImage_red_cannal.reserve(height + 2);							//
+		fImage_blue_cannal.reserve((height + 2)  * (*Scale));							// storage reserve
+		fImage_green_cannal.reserve((height + 2)  * (*Scale));						//	
+		fImage_red_cannal.reserve((height + 2)  * (*Scale));							//
 
-		fImage_RGB_blue.resize((width + 2), 0);
-		fImage_RGB_green.resize((width + 2), 0);
-		fImage_RGB_red.resize((width + 2), 0);
+		fImage_RGB_blue.resize(((width + 2)  * (*Scale)), 0);
+		fImage_RGB_green.resize(((width + 2)  * (*Scale)), 0);
+		fImage_RGB_red.resize(((width + 2)  * (*Scale)), 0);
 
 		fImage_blue_cannal.insert(fImage_blue_cannal.begin(), fImage_RGB_blue);
 		fImage_green_cannal.insert(fImage_green_cannal.begin(), fImage_RGB_green);
@@ -691,6 +691,10 @@ void Read_BMP::upscaling()
 
 	int width = char_to_int(&DIB_header_pointer->width[0]) * (*Scale);
 
+	std::vector <std::vector <float>> fImage_blue_cannal_copy = fImage_blue_cannal;
+	std::vector <std::vector <float>> fImage_green_cannal_copy = fImage_green_cannal;
+	std::vector <std::vector <float>> fImage_red_cannal_copy = fImage_red_cannal;
+
 	switch (bitsperpixels)
 	{
 	case 24:
@@ -702,15 +706,28 @@ void Read_BMP::upscaling()
 			throw std::invalid_argument("Vector is not converted to 'float' type!");
 		}
 
+		// adding zero value
 		for (int i = 0; i < height; i++)
 		{
 			for (int j = 0; j < width; j++)
 			{
-				//fImage_blue_cannal[i + 1][j + 1] = fImage_blue_cannal[i + 2][j] * BoX_b;
-
-				// **** green, red
+				fImage_blue_cannal[i + 1][j + 1] = 0.0f;
+				fImage_green_cannal[i + 1][j + 1] = 0.0f;
+				fImage_red_cannal[i + 1][j + 1] = 0.0f;
 			}
 		}
+
+		for (int i = 0; i < height; i++)
+		{
+			for (int j = 0; j < width; j++)
+			{
+				fImage_blue_cannal[(i * 2) + 2][(j * 2) + 2] = fImage_blue_cannal_copy[i + 1][j + 1];
+				fImage_green_cannal[(i * 2) + 2][(j * 2) + 2] = fImage_green_cannal_copy[i + 1][j + 1];
+				fImage_red_cannal[(i * 2) + 2][(j * 2) + 2] = fImage_red_cannal_copy[i + 1][j + 1];
+			}
+		}
+
+		printData();
 
 		break;
 
@@ -741,7 +758,7 @@ void Read_BMP::Calculating_BMP(Read_BMP BMP,
 	BMP.chartofloatVector();
 	BMP.addzerovalueVector();
 
-
+	//BMP.upscaling();
 	BMP.boxblurImage();
 
 
