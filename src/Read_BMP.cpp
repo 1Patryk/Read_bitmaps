@@ -272,9 +272,9 @@ void Read_BMP::writeData(const char* Output_filename_path)
 
 	short int bitsperpixels = char_to_int(&DIB_header_pointer->bitsperpixels[0]);
 
-	int height = char_to_int(&DIB_header_pointer->height[0]) * (*Scale);
+	int height = char_to_int(&DIB_header_pointer->height[0]);
 
-	int width = char_to_int(&DIB_header_pointer->width[0]) * (*Scale);
+	int width = char_to_int(&DIB_header_pointer->width[0]);
 
 	file_w.seekp(BITMAP_header_pointer->image_offset[0]);
 
@@ -410,9 +410,9 @@ void Read_BMP::floattocharVector()
 {
 	short int bitsperpixels = char_to_int(&DIB_header_pointer->bitsperpixels[0]);
 
-	int height = char_to_int(&DIB_header_pointer->height[0]) * (*Scale);
+	int height = char_to_int(&DIB_header_pointer->height[0]);
 
-	int width = char_to_int(&DIB_header_pointer->width[0]) * (*Scale);
+	int width = char_to_int(&DIB_header_pointer->width[0]);
 
 	switch (bitsperpixels)
 	{
@@ -546,9 +546,9 @@ void Read_BMP::lesszerovalueVector()
 {
 	short int bitsperpixels = char_to_int(&DIB_header_pointer->bitsperpixels[0]);
 
-	int height = char_to_int(&DIB_header_pointer->height[0]) * (*Scale);
+	int height = char_to_int(&DIB_header_pointer->height[0]);
 
-	int width = char_to_int(&DIB_header_pointer->width[0]) * (*Scale);
+	int width = char_to_int(&DIB_header_pointer->width[0]);
 
 	switch (bitsperpixels)
 	{
@@ -611,16 +611,15 @@ void Read_BMP::boxblurImage(Read_BMP BMP,
 	const char* Open_filename,
 	const char* Output_filename_path)
 {
-	BMP.readData(Open_filename);
-	BMP.chartofloatVector();
-	BMP.addzerovalueVector();
+	readData(Open_filename);
+	chartofloatVector();
+	addzerovalueVector();
 
 	short int bitsperpixels = char_to_int(&DIB_header_pointer->bitsperpixels[0]);
 
 	int height = char_to_int(&DIB_header_pointer->height[0]);
 
 	int width = char_to_int(&DIB_header_pointer->width[0]);
-
 	float BoX_b = 0.111111f;
 
 	switch (bitsperpixels)
@@ -669,9 +668,9 @@ void Read_BMP::boxblurImage(Read_BMP BMP,
 			}
 		}
 
-		BMP.lesszerovalueVector();
-		BMP.floattocharVector();
-		BMP.writeData(Output_filename_path);
+		lesszerovalueVector();
+		floattocharVector();
+		writeData(Output_filename_path);
 
 		break;
 
