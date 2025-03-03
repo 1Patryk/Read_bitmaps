@@ -13,7 +13,6 @@ void Display_results_counting_time(start Start, stop Stop, std::string namefunct
 
 int main()
 {
-	std::string path = { " 'SOURCE_DIR' "};
 	const char* Open_filename = { "../In_BMP/sample_1280_853.bmp" };		// name file to read
 	const char* Output_filename_path = { "../Out_BMP/" };					// name file to write
 
@@ -23,7 +22,7 @@ int main()
 
 	Read_BMP BMP;
 
-	BMP.Calculating_BMP(BMP, Open_filename, Output_filename_path);
+	BMP.boxblurImage(BMP, Open_filename, Output_filename_path);
 
 	auto Stop = std::chrono::high_resolution_clock::now();
 

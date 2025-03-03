@@ -88,13 +88,20 @@ public:
 	void floattocharVector();												// change data type from float to char
 	void addzerovalueVector();												// and add '0' value 
 	void lesszerovalueVector();												// less '0' value 
-	void boxblurImage();													// Create box blur image (normalized)
-
-	void upscaling();
-
-	void Calculating_BMP(Read_BMP BMP, 
+	void boxblurImage														// Create box blur image (normalized)
+	(														
+		Read_BMP BMP, 										
 		const char* Open_filename,
-		const char* Output_filename_path);
+		const char* Output_filename_path
+	);									
+
+	void upscaling															//
+	(	
+		Read_BMP BMP, 											
+		const char* Open_filename,
+		const char* Output_filename_path
+	);
+
 	// The bitmap image starts in the lower left corner
 };
 

@@ -607,8 +607,14 @@ void Read_BMP::lesszerovalueVector()
 	}
 }
 
-void Read_BMP::boxblurImage()
+void Read_BMP::boxblurImage(Read_BMP BMP, 
+	const char* Open_filename,
+	const char* Output_filename_path)
 {
+	BMP.readData(Open_filename);
+	BMP.chartofloatVector();
+	BMP.addzerovalueVector();
+
 	short int bitsperpixels = char_to_int(&DIB_header_pointer->bitsperpixels[0]);
 
 	int height = char_to_int(&DIB_header_pointer->height[0]);
@@ -626,6 +632,7 @@ void Read_BMP::boxblurImage()
 				fImage_red_cannal.size() == 0))
 		{
 			throw std::invalid_argument("Vector is not converted to 'float' type!");
+			std::cout << "Vector is not converted to 'float' type!" << std::endl;
 		}
 
 		for (int i = 0; i < height; i++)
@@ -662,6 +669,10 @@ void Read_BMP::boxblurImage()
 			}
 		}
 
+		BMP.lesszerovalueVector();
+		BMP.floattocharVector();
+		BMP.writeData(Output_filename_path);
+
 		break;
 
 	case 32:
@@ -683,7 +694,12 @@ void Read_BMP::boxblurImage()
 	}
 }
 
-void Read_BMP::upscaling()
+void Read_BMP::upscaling
+(
+	Read_BMP BMP, 
+	const char* Open_filename,
+	const char* Output_filename_path
+)
 {
 	short int bitsperpixels = char_to_int(&DIB_header_pointer->bitsperpixels[0]);
 
@@ -748,21 +764,4 @@ void Read_BMP::upscaling()
 		std::cout << "Bits per pixels value is incorrect!" << std::endl;
 		break;
 	}
-}
-
-void Read_BMP::Calculating_BMP(Read_BMP BMP, 
-	const char* Open_filename,
-	const char* Output_filename_path)
-{
-	BMP.readData(Open_filename);
-	BMP.chartofloatVector();
-	BMP.addzerovalueVector();
-
-	//BMP.upscaling();
-	BMP.boxblurImage();
-
-
-	BMP.lesszerovalueVector();
-	BMP.floattocharVector();
-	BMP.writeData(Output_filename_path);
 }
