@@ -113,13 +113,30 @@ public:
 	void readData(const char* Open_filename);	
 	
 	// save data to file
-	void writeData(const char* Output_filename_path);								
+	void writeData
+	(
+		const char* Output_filename_path,
+		std::vector <std::vector <float>> Image_white_cannal,
+		std::vector <std::vector <float>> Image_blue_cannal,
+		std::vector <std::vector <float>> Image_green_cannal,
+		std::vector <std::vector <float>> Image_red_cannal
+	);								
 		
 	// change data type from char to float and add '0' value 
 	void chartofloatVector();		
 	
 	// change data type from float to char
-	void floattocharVector();	
+	void floattocharVector
+	(
+		std::vector <std::vector <float>> Image_white_cannal,
+		std::vector <std::vector <float>> Image_blue_cannal,
+		std::vector <std::vector <float>> Image_green_cannal,
+		std::vector <std::vector <float>> Image_red_cannal,
+		std::vector <float> fImage_RGB_white,
+		std::vector <float> fImage_RGB_blue,
+		std::vector <float> fImage_RGB_green,
+		std::vector <float> fImage_RGB_red
+	);	
 	
 	// and add '0' value 
 	void addzerovalueVector();	
@@ -138,7 +155,8 @@ public:
 	// upscaling by the value of the variable 'Scale'
 	void upscaling															
 	(	
-		Read_BMP BMP, 											
+		Read_BMP BMP, 
+		float Scale_factor,										
 		const char* Open_filename,
 		const char* Output_filename_path
 	);
