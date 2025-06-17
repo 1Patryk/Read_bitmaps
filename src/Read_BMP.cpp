@@ -429,9 +429,9 @@ void Read_BMP::floattocharVector
 {
 	short int bitsperpixels = char_to_int(&DIB_header_pointer->bitsperpixels[0]);
 
-	int height = char_to_int(&DIB_header_pointer->height[0]) * (*Scale);
+	int height = char_to_int(&DIB_header_pointer->height[0]);
 
-	int width = char_to_int(&DIB_header_pointer->width[0]) * (*Scale);
+	int width = char_to_int(&DIB_header_pointer->width[0]);
 
 	switch (bitsperpixels)
 	{
@@ -784,6 +784,9 @@ void Read_BMP::upscaling
 		fImage_RGB_red_resize.clear();
 	}
 
+	int k = 0;
+	int l = 0;
+
 	switch (bitsperpixels)
 	{
 	case 24:
@@ -794,17 +797,29 @@ void Read_BMP::upscaling
 		{
 			throw std::invalid_argument("Vector is not converted to 'float' type!");
 		}
-		/*
-		for (int i = 0; i < height; i++)
+
+		for (int i = 1; i < height + 1; i += 2)
 		{
-			for (int j = 0; j < width; j++)
+			for (int j = 1; j < width + 1; j += 2)
 			{
-				fImage_blue_cannal_resize[(i * 2) + 2][(j * 2) + 2] = fImage_blue_cannal[i + 1][j + 1];
-				fImage_green_cannal_resize[(i * 2) + 2][(j * 2) + 2] = fImage_green_cannal[i + 1][j + 1];
-				fImage_red_cannal_resize[(i * 2) + 2][(j * 2) + 2] = fImage_red_cannal[i + 1][j + 1];
+				fImage_blue_cannal_resize[i][j] = fImage_blue_cannal[k][l];
+				fImage_green_cannal_resize[i][j] = fImage_green_cannal[k][l];
+				fImage_red_cannal_resize[i][j] = fImage_red_cannal[k][l];
+				l++;
 			}
+			l = 0;
+			k++;
+		}
+		k = 0;
+
+		/*
+		for (int i = 1; i < width + 1; i += 2)
+		{
+			fImage_blue_cannal_resize[0][i] = (0.0f + fImage_blue_cannal_resize[1][i]) / 2.0f;
+			std::cout << fImage_blue_cannal_resize[0][i] << std::endl;
 		}
 		*/
+		
 		*(uint32_t*)&DIB_header_pointer->height[0] = *(uint32_t*)&(height);
 		*(uint32_t*)&DIB_header_pointer->width[0] = *(uint32_t*)&(width);
 
