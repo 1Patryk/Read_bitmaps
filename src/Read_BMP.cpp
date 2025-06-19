@@ -812,14 +812,111 @@ void Read_BMP::upscaling
 		}
 		k = 0;
 
-		/*
-		for (int i = 1; i < width + 1; i += 2)
+		for (int i = 2; i < (height - 2); i += 2)
 		{
-			fImage_blue_cannal_resize[0][i] = (0.0f + fImage_blue_cannal_resize[1][i]) / 2.0f;
+			for (int j = 2; j < width; j += 2)
+			{
+				fImage_blue_cannal_resize[i][j] = (
+					fImage_blue_cannal_resize[i-1][j-1] +
+					fImage_blue_cannal_resize[i-1][j+1] +
+					fImage_blue_cannal_resize[i+1][j-1] +
+					fImage_blue_cannal_resize[i+1][j+1]
+				)	/ 4.0f;
+				fImage_green_cannal_resize[i][j] = (
+					fImage_green_cannal_resize[i-1][j-1] +
+					fImage_green_cannal_resize[i-1][j+1] +
+					fImage_green_cannal_resize[i+1][j-1] +
+					fImage_green_cannal_resize[i+1][j+1]
+				)	/ 4.0f;
+				fImage_red_cannal_resize[i][j] = (
+					fImage_red_cannal_resize[i-1][j-1] +
+					fImage_red_cannal_resize[i-1][j+1] +
+					fImage_red_cannal_resize[i+1][j-1] +
+					fImage_red_cannal_resize[i+1][j+1]
+				)	/ 4.0f;
+			}
+		}
+
+		fImage_blue_cannal_resize[0][0] = fImage_blue_cannal_resize[1][1];
+		fImage_green_cannal_resize[0][0] = fImage_green_cannal_resize[1][1];
+		fImage_red_cannal_resize[0][0] = fImage_red_cannal_resize[1][1];
+		
+		for (int i = 1; i < width + 1; i++)
+		{
+			fImage_blue_cannal_resize[0][i] = fImage_blue_cannal_resize[1][i];
+			fImage_green_cannal_resize[0][i] = fImage_green_cannal_resize[1][i];
+			fImage_red_cannal_resize[0][i] = fImage_red_cannal_resize[1][i];
 			std::cout << fImage_blue_cannal_resize[0][i] << std::endl;
 		}
-		*/
-		
+
+		for (int i = 2; i < (height - 2); i += 2)
+		{
+			for (int j = 1; j < width; j += 2)
+			{
+				fImage_blue_cannal_resize[i][j] = (
+					fImage_blue_cannal_resize[i][j-1] +
+					fImage_blue_cannal_resize[i+1][j] +
+					fImage_blue_cannal_resize[i][j+1] +
+					fImage_blue_cannal_resize[i-1][j]
+				)	/ 4.0f;
+				fImage_green_cannal_resize[i][j] = (
+					fImage_green_cannal_resize[i][j-1] +
+					fImage_green_cannal_resize[i+1][j] +
+					fImage_green_cannal_resize[i][j+1] +
+					fImage_green_cannal_resize[i-1][j]
+				)	/ 4.0f;
+				fImage_red_cannal_resize[i][j] = (
+					fImage_red_cannal_resize[i][j-1] +
+					fImage_red_cannal_resize[i+1][j] +
+					fImage_red_cannal_resize[i][j+1] +
+					fImage_red_cannal_resize[i-1][j]
+				)	/ 4.0f;
+			}
+		}
+
+		for (int i = 3; i < (height - 3); i += 2)
+		{
+			for (int j = 2; j < width; j += 2)
+			{
+				fImage_blue_cannal_resize[i][j] = (
+					fImage_blue_cannal_resize[i][j-1] +
+					fImage_blue_cannal_resize[i+1][j] +
+					fImage_blue_cannal_resize[i][j+1] +
+					fImage_blue_cannal_resize[i-1][j]
+				)	/ 4.0f;
+				fImage_green_cannal_resize[i][j] = (
+					fImage_green_cannal_resize[i][j-1] +
+					fImage_green_cannal_resize[i+1][j] +
+					fImage_green_cannal_resize[i][j+1] +
+					fImage_green_cannal_resize[i-1][j]
+				)	/ 4.0f;
+				fImage_red_cannal_resize[i][j] = (
+					fImage_red_cannal_resize[i][j-1] +
+					fImage_red_cannal_resize[i+1][j] +
+					fImage_red_cannal_resize[i][j+1] +
+					fImage_red_cannal_resize[i-1][j]
+				)	/ 4.0f;
+			}
+		}
+
+		for (int j = 2; j < width; j += 2)
+		{
+			fImage_blue_cannal_resize[1][j]	= (
+				fImage_blue_cannal_resize[1][j - 1] +
+				fImage_blue_cannal_resize[1][j + 1]
+			) / 2.0f;
+			fImage_green_cannal_resize[1][j]	= (
+				fImage_green_cannal_resize[1][j - 1] +
+				fImage_green_cannal_resize[1][j + 1]
+			) / 2.0f;
+			fImage_red_cannal_resize[1][j]	= (
+				fImage_red_cannal_resize[1][j - 1] +
+				fImage_red_cannal_resize[1][j + 1]
+			) / 2.0f;
+		}
+
+
+
 		*(uint32_t*)&DIB_header_pointer->height[0] = *(uint32_t*)&(height);
 		*(uint32_t*)&DIB_header_pointer->width[0] = *(uint32_t*)&(width);
 
