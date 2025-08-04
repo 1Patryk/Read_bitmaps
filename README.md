@@ -1,6 +1,6 @@
 # Project name: Read_bitmaps
 
-This project is a tools for modification files (images) in "BMP" format.
+This project is a tool for modifying files (images) in the “BMP” format.
 
 ## Bitmap format structure
 
@@ -56,12 +56,16 @@ Example for 32-bit format (offset is the value of bit '0A' in BITMAP_header):
 
 ### Box blur image
 
-A box blur is an algorithm that can blur an image according to the following equation:
+Box blur is an algorithm that can blur an image by multiplying pixel values with the following matrix:
 
-$ n value of pix = 1/9 * sum(pix(-1, 1), pix(0, 1), pix(1, 1) ... etc. $ (for every RGB cannal)
+                   [ 1 1 1 ]
+    pix[n] = 1/9 * [ 1 1 1 ]
+                   [ 1 1 1 ] 
 
 ### Upscaling image
 
-The up-scaling algorithm can double the resolution of the input image by averaging the values of neighboring pixels according to the following equation:
+The up-scaling algorithm can double the resolution of the input image by averaging the values of neighboring pixels according to the following matrix:
 
-$ n value of pix  = sum(pix(-1, -1), pix(-1, 1), pix(1, -1), pix(1, 1) / 4 $
+                   [ 1 0 1 ]
+    pix[n] = 1/4 * [ 0 0 0 ]
+                   [ 1 0 1 ] 
